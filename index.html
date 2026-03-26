@@ -445,6 +445,21 @@ nav {
     </div>
   </div>
 </div>
+  
+<!-- ══ SEGMENT DETAIL MODAL ══ -->
+<div class="modal-bg" id="seg-modal-bg" onclick="closeSegModalBg(event)">
+  <div class="modal-sheet wide">
+    <div class="modal-tape"></div>
+    <div class="modal-head">
+      <div class="modal-head-title" id="seg-modal-title">Segment Details</div>
+      <button class="modal-x" onclick="closeSegModal()">&#215;</button>
+    </div>
+    <div class="modal-content" id="seg-modal-body"></div>
+    <div class="modal-foot">
+      <button class="btn-ink" onclick="saveSegDetails()">Save Segment Notes</button>
+      <button class="btn-ghost" onclick="closeSegModal()">Cancel</button>
+    </div>
+  </div>
 </div>
 
 <!-- ══ SHOW BIBLE ══ -->
@@ -607,21 +622,6 @@ nav {
     <div class="modal-foot">
       <button class="btn-ink" onclick="editFromModal()">Edit episode</button>
       <button class="btn-ghost" onclick="closeModalDirect()">Close</button>
-    </div>
-  </div>
-</div>
-<!-- ══ SEGMENT DETAIL MODAL ══ -->
-<div class="modal-bg" id="seg-modal-bg" onclick="closeSegModalBg(event)">
-  <div class="modal-sheet wide">
-    <div class="modal-tape"></div>
-    <div class="modal-head">
-      <div class="modal-head-title" id="seg-modal-title">Segment Details</div>
-      <button class="modal-x" onclick="closeSegModal()">&#215;</button>
-    </div>
-    <div class="modal-content" id="seg-modal-body"></div>
-    <div class="modal-foot">
-      <button class="btn-ink" onclick="saveSegDetails()">Save Segment Notes</button>
-      <button class="btn-ghost" onclick="closeSegModal()">Cancel</button>
     </div>
   </div>
 </div>
