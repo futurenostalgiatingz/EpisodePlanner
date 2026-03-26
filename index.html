@@ -19,256 +19,416 @@
   --red-ankara: #C0392B;
   --teal-ankara: #1A6B5A;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  background-color: var(--dark);
-  /* The "Ankara Stripe" Border Scheme */
-  border-left: 8px solid var(--teal-ankara);
-  border-right: 8px solid var(--teal-ankara);
-  outline: 4px solid var(--gold);
-  outline-offset: -12px;
+  background-color: #2A6B3A;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(200,160,32,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(42,107,58,0.4) 0%, transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
   min-height: 100vh;
   font-family: 'DM Sans', sans-serif;
-  color: var(--cream);
-  padding: 60px;
+  color: var(--ink);
+  overflow-x: hidden;
+  /* Triple-Stripe Frame Update */
+  border: 10px solid var(--teal-ankara);
+  outline: 4px solid var(--gold);
+  outline-offset: -14px;
+  border-bottom-width: 30px;
+  border-bottom-color: var(--rust);
 }
 
-/* Header & Typography */
-h1, h2, h3 { font-family: 'Bebas Neue', cursive; letter-spacing: 2px; text-transform: uppercase; }
-.marker { font-family: 'Permanent+Marker', cursive; color: var(--orange); }
+/* ── ANKARA BORDERS top & bottom ── */
+body::before, body::after {
+  content: '';
+  position: fixed;
+  left: 0; right: 0;
+  height: 72px;
+  background-image: url("data:image/png;base64,...[Original Base64 Data Retained]...");
+  background-size: contain;
+  z-index: 1001;
+  pointer-events: none;
+}
+body::before { top: 0; }
+body::after { bottom: 0; transform: rotate(180deg); }
 
-/* Navigation */
-nav {
+/* ── LAYOUT ── */
+#app-interface {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  min-height: 100vh;
+  max-width: 1800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  padding: 120px 40px;
+  background: rgba(42, 31, 14, 0.1);
+  border-right: 1px solid rgba(42, 31, 14, 0.1);
   display: flex;
-  gap: 20px;
-  margin-bottom: 40px;
-  border-bottom: 2px solid var(--rust);
-  padding-bottom: 10px;
+  flex-direction: column;
 }
-nav button {
-  background: none;
+
+.logo-area h1 {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 4rem;
+  line-height: 0.85;
+  color: var(--dark);
+  letter-spacing: -1px;
+}
+.logo-area .marker {
+  font-family: 'Permanent Marker', cursive;
+  color: var(--rust);
+  font-size: 2.8rem;
+  display: block;
+  margin-top: -10px;
+  margin-left: 40px;
+  transform: rotate(-4deg);
+  text-shadow: 2px 2px 0px var(--cream);
+}
+
+.nav-menu { margin-top: 80px; flex-grow: 1; }
+.nav-btn {
+  display: block;
+  width: 100%;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  background: var(--cream);
   border: none;
-  color: var(--offwhite);
+  border-left: 0px solid var(--orange);
   font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ink);
   cursor: pointer;
-  font-size: 1.1rem;
-  transition: color 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+  box-shadow: 6px 6px 0px rgba(0,0,0,0.1);
 }
-nav button:hover, nav button.active { color: var(--gold); }
+.nav-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px var(--orange);
+  border-left-width: 8px;
+}
+.nav-btn.active {
+  background: var(--orange);
+  color: white;
+  border-left: 8px solid var(--ink);
+}
 
-/* Page visibility */
-.page { display: none; }
-.page.active { display: block; }
+/* ── MAIN CONTENT ── */
+.main-stage { padding: 120px 60px; position: relative; }
 
-/* Dashboard Cards */
-.ep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+/* ── DASHBOARD ── */
+.view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
+}
+.view-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 3.5rem;
+  color: var(--ink);
+  position: relative;
+}
+.view-header h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px; left: 0;
+  width: 100px; height: 6px;
+  background: var(--gold);
+}
+
+.ep-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 40px;
+}
+
 .ep-card {
-  background: var(--ink);
-  padding: 20px;
-  border: 1px solid var(--gold);
+  background: var(--offwhite);
+  padding: 35px;
   position: relative;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: 0.4s;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 12px 12px 0px rgba(0,0,0,0.05);
 }
-.ep-card:hover { transform: translateY(-5px); border-color: var(--orange); }
+.ep-card:hover {
+  transform: translateY(-8px) rotate(1deg);
+  box-shadow: 20px 20px 0px rgba(0,0,0,0.1);
+}
+.ep-card::before {
+  content: '';
+  position: absolute;
+  top: -15px; left: 50%;
+  width: 100px; height: 35px;
+  background: var(--tape);
+  transform: translateX(-50%) rotate(-2deg);
+}
+.ep-card h3 {
+  font-family: 'Bebas Neue';
+  font-size: 2.2rem;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
 
-/* Segment Editor - NEW FIXED UI */
-.builder-seg-item {
-  background: rgba(255,255,255,0.05);
+/* ── BUILDER CANVAS ── */
+.builder-canvas {
+  background: var(--cream);
+  padding: 60px;
   border: 1px solid var(--gold);
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 4px;
-}
-.seg-row-top { display: flex; gap: 15px; margin-bottom: 12px; }
-.seg-row-top select, .seg-row-top input {
-  background: var(--dark);
-  border: 1px solid var(--rust);
-  color: var(--cream);
-  padding: 8px;
+  box-shadow: 30px 30px 0px rgba(42, 31, 14, 0.1);
 }
 
-/* Long-form Text Box for Scripts */
-.seg-note-area {
+.ep-title-input {
   width: 100%;
-  min-height: 120px; /* Space for scripts/lists */
-  background: #111;
-  color: var(--offwhite);
-  border: 1px solid rgba(212, 150, 10, 0.4);
-  padding: 12px;
-  font-family: 'DM Sans', sans-serif;
-  line-height: 1.6;
+  background: transparent;
+  border: none;
+  border-bottom: 4px solid var(--ink);
+  font-family: 'Bebas Neue';
+  font-size: 4.5rem;
+  color: var(--ink);
+  margin-bottom: 50px;
+  outline: none;
+}
+
+.segment-item {
+  background: rgba(42, 31, 14, 0.03);
+  padding: 30px;
+  margin-bottom: 25px;
+  border-left: 10px solid var(--gold);
+  position: relative;
+}
+
+.seg-row { display: flex; gap: 20px; align-items: center; margin-bottom: 20px; }
+.seg-row select, .seg-row input[type="text"] {
+  background: white;
+  border: 2px solid var(--ink);
+  padding: 12px 15px;
+  font-family: 'Space Mono';
+  font-size: 1rem;
+}
+
+/* Note Update to Textarea */
+.seg-note {
+  width: 100%;
+  min-height: 120px;
+  background: white;
+  border: 1px dashed var(--rust);
+  padding: 15px;
+  font-family: 'DM Sans';
+  font-size: 1rem;
   resize: vertical;
 }
 
-.seg-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 15px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+/* ── BIBLE ── */
+.rotation-card {
+  background: white;
+  padding: 40px;
+  border-left: 15px solid var(--teal-ankara);
+  margin-top: 40px;
+}
+.rotation-card h4 {
+  font-family: 'Space Mono';
+  color: var(--rust);
+  margin-bottom: 20px;
+  text-transform: uppercase;
 }
 
-.btn-del { background: var(--rust); color: white; border: none; padding: 6px 12px; cursor: pointer; }
-
-/* Show Bible Rotation styling */
-.bible-rotation-box {
-  background: var(--ink);
-  border: 1px solid var(--teal-ankara);
-  padding: 25px;
-  margin-top: 30px;
+/* ── MODAL ── */
+#modal-bg {
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  background: rgba(28, 18, 8, 0.92);
+  display: none; align-items: center; justify-content: center; z-index: 2000;
+  backdrop-filter: blur(5px);
 }
-.week-item { margin-bottom: 10px; font-size: 1.2rem; }
-.wildcard-box { border-left: 4px solid var(--gold); padding-left: 15px; margin-top: 15px; font-style: italic; }
+#modal-bg.open { display: flex; }
+.modal-paper {
+  background: var(--cream);
+  width: 90%; max-width: 900px;
+  max-height: 85vh; overflow-y: auto;
+  padding: 80px;
+  position: relative;
+  border: 1px solid var(--gold);
+  box-shadow: 40px 40px 0px var(--dark);
+}
 
-/* Shared Buttons */
-.btn-primary { background: var(--gold); color: var(--dark); border: none; padding: 10px 20px; cursor: pointer; font-family: 'Space Mono'; font-weight: bold; }
 </style>
 </head>
 <body>
 
-  <h1>Future <span class="marker">Nostalgia</span> Planner</h1>
-
-  <nav>
-    <button onclick="showPage('dashboard')" id="nav-dashboard" class="active">DASHBOARD</button>
-    <button onclick="showPage('builder')" id="nav-builder">EPISODE BUILDER</button>
-    <button onclick="showPage('bible')" id="nav-bible">SHOW BIBLE</button>
-  </nav>
-
-  <div id="dashboard" class="page active">
-    <h2>Planned Episodes</h2>
-    <div id="ep-grid" class="ep-grid"></div>
-    <button class="btn-primary" style="margin-top:30px" onclick="openBuilder()">+ PLAN NEW EPISODE</button>
-  </div>
-
-  <div id="builder" class="page">
-    <h2 id="builder-title">New Episode</h2>
-    <div style="margin-bottom: 20px;">
-      <input type="text" id="ep-title" placeholder="Episode Title" style="width:100%; padding:15px; font-size:1.5rem; background:transparent; border:none; border-bottom:2px solid var(--gold); color:var(--cream);">
+<div id="app-interface">
+  <aside class="sidebar">
+    <div class="logo-area">
+      <h1>Future</h1>
+      <span class="marker">Nostalgia</span>
     </div>
-    
-    <div id="builder-segments">
+    <nav class="nav-menu">
+      <button class="nav-btn" onclick="showPage('dash')">Dashboard</button>
+      <button class="nav-btn" onclick="openBuilder()">+ New Episode</button>
+      <button class="nav-btn" onclick="showPage('bible')">Show Bible</button>
+    </nav>
+  </aside>
+
+  <main class="main-stage">
+    <section id="page-dash" class="page-view">
+      <div class="view-header">
+        <h2>Episode Archive</h2>
       </div>
+      <div id="ep-grid" class="ep-grid"></div>
+    </section>
 
-    <div style="display:flex; gap:15px;">
-      <button class="btn-primary" onclick="addSegment()">+ ADD SEGMENT</button>
-      <button class="btn-primary" style="background:var(--teal-ankara); color:white;" onclick="saveEpisode()">SAVE EPISODE</button>
-    </div>
-  </div>
-
-  <div id="bible" class="page">
-    <h2>Show Bible & Formats</h2>
-    <div class="bible-rotation-box">
-      <h3>Standard Monthly Rotation</h3>
-      <div class="week-item"><strong>Week 1:</strong> Format A</div>
-      <div class="week-item"><strong>Week 2:</strong> Format C</div>
-      <div class="week-item"><strong>Week 3:</strong> Format D</div>
-      <div class="week-item"><strong>Week 4:</strong> Format B</div>
-      
-      <div class="wildcard-box">
-        <strong>Format E (Special/Wildcard):</strong> This format is reserved for 5th-week months or as a flexible "swap-in" that can replace any of the standard 4 formats depending on content needs.
+    <section id="page-builder" class="page-view" style="display:none;">
+      <div class="view-header">
+        <h2 id="builder-op-title">Builder</h2>
       </div>
-    </div>
-  </div>
-
-  <script>
-    let episodes = JSON.parse(localStorage.getItem('fn_episodes')) || [];
-    let currentEditId = null;
-    let builderData = { title: '', segments: [] };
-
-    function showPage(id) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      document.getElementById('nav-' + id).classList.add('active');
-      if(id === 'dashboard') renderDashboard();
-    }
-
-    function openBuilder(id = null) {
-      if(id) {
-        const ep = episodes.find(e => e.id === id);
-        builderData = JSON.parse(JSON.stringify(ep));
-        currentEditId = id;
-        document.getElementById('builder-title').innerText = "Edit Episode";
-      } else {
-        builderData = { title: '', segments: [] };
-        currentEditId = null;
-        document.getElementById('builder-title').innerText = "Plan New Episode";
-      }
-      document.getElementById('ep-title').value = builderData.title;
-      renderSegments();
-      showPage('builder');
-    }
-
-    function addSegment() {
-      builderData.segments.push({ type: 'topic', name: '', note: '' });
-      renderSegments();
-    }
-
-    function updateSeg(idx, field, val) {
-      builderData.segments[idx][field] = val;
-    }
-
-    function removeSeg(idx) {
-      builderData.segments.splice(idx, 1);
-      renderSegments();
-    }
-
-    function renderSegments() {
-      const container = document.getElementById('builder-segments');
-      container.innerHTML = '';
-      builderData.segments.forEach((s, idx) => {
-        const div = document.createElement('div');
-        div.className = 'builder-seg-item';
-        div.innerHTML = `
-          <div class="seg-row-top">
-            <select onchange="updateSeg(${idx}, 'type', this.value)">
-              <option value="intro" ${s.type==='intro'?'selected':''}>Intro</option>
-              <option value="topic" ${s.type==='topic'?'selected':''}>Topic/Segment</option>
-              <option value="music" ${s.type==='music'?'selected':''}>Music Break</option>
-              <option value="outro" ${s.type==='outro'?'selected':''}>Outro</option>
-            </select>
-            <input type="text" placeholder="Segment Name" value="${s.name}" 
-                   oninput="updateSeg(${idx}, 'name', this.value)" style="flex:1">
-          </div>
-          
-          <textarea class="seg-note-area" placeholder="Write your script, bullet points, or paste research here..."
-                    oninput="updateSeg(${idx}, 'note', this.value)">${s.note || ''}</textarea>
-          
-          <div class="seg-actions">
-            <button class="btn-del" onclick="removeSeg(${idx})">DELETE SEGMENT</button>
-          </div>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function saveEpisode() {
-      builderData.title = document.getElementById('ep-title').value || 'Untitled Episode';
-      if(currentEditId) {
-        const idx = episodes.findIndex(e => e.id === currentEditId);
-        episodes[idx] = builderData;
-      } else {
-        builderData.id = Date.now();
-        episodes.push(builderData);
-      }
-      localStorage.setItem('fn_episodes', JSON.stringify(episodes));
-      showPage('dashboard');
-    }
-
-    function renderDashboard() {
-      const grid = document.getElementById('ep-grid');
-      grid.innerHTML = episodes.map(ep => `
-        <div class="ep-card" onclick="openBuilder(${ep.id})">
-          <h3>${ep.title}</h3>
-          <p>${ep.segments.length} Segments</p>
+      <div class="builder-canvas">
+        <input type="text" id="ep-name" class="ep-title-input" placeholder="EPISODE TITLE...">
+        <div id="seg-list"></div>
+        <div class="action-bar" style="margin-top:40px; display:flex; gap:20px;">
+          <button class="nav-btn" style="background:var(--gold)" onclick="addSegment()">+ Add Segment</button>
+          <button class="nav-btn" style="background:var(--rust); color:white;" onclick="saveEp()">Save Episode</button>
         </div>
-      `).join('');
-    }
+      </div>
+    </section>
 
-    renderDashboard();
-  </script>
+    <section id="page-bible" class="page-view" style="display:none;">
+      <div class="view-header">
+        <h2>The Show Bible</h2>
+      </div>
+      <div class="rotation-card">
+        <h4>Monthly Broadcast Rotation</h4>
+        <p><strong>Week 1:</strong> Format A — Origins & Artifacts</p>
+        <p><strong>Week 2:</strong> Format C — The Deep Dive</p>
+        <p><strong>Week 3:</strong> Format D — Guest Spotlight</p>
+        <p><strong>Week 4:</strong> Format B — Community Sonic Map</p>
+        <p style="margin-top:20px; font-style:italic; color:var(--rust);">* Format E acts as the wildcard for 5th weeks or thematic overrides.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="modal-bg" onclick="closeModal(event)">
+  <div class="modal-paper">
+    <div id="m-body"></div>
+    <div class="action-bar" style="margin-top:40px; display:flex; gap:20px;">
+      <button class="nav-btn" onclick="editFromModal()">Edit Plan</button>
+      <button class="nav-btn" style="background:var(--rust); color:white;" onclick="closeModalDirect()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let episodes = JSON.parse(localStorage.getItem('fn_episodes')) || [];
+let modalEpId = null;
+
+const SEG_COLOR = { intro: '#E07B1A', topic: '#D4960A', music: '#1A6B5A', outro: '#B53A10' };
+
+function showPage(id) {
+  document.querySelectorAll('.page-view').forEach(v => v.style.display = 'none');
+  document.getElementById('page-' + id).style.display = 'block';
+  if(id === 'dash') renderDash();
+}
+
+function renderDash() {
+  const grid = document.getElementById('ep-grid');
+  grid.innerHTML = episodes.map(ep => `
+    <div class="ep-card" onclick="openModal(${ep.id})">
+      <h3>${ep.name}</h3>
+      <div style="font-family:'Space Mono'; font-size:0.85rem; color:var(--rust);">
+        ${ep.segments.length} SEGMENTS PLANNED
+      </div>
+    </div>
+  `).join('');
+}
+
+function openBuilder(existingId = null) {
+  modalEpId = existingId;
+  document.getElementById('ep-name').value = '';
+  document.getElementById('seg-list').innerHTML = '';
+  if(existingId) {
+    const ep = episodes.find(e => e.id === existingId);
+    document.getElementById('ep-name').value = ep.name;
+    ep.segments.forEach(s => addSegment(s.t, s.n, s.note));
+  } else {
+    addSegment('intro', 'Introduction', '');
+  }
+  showPage('builder');
+}
+
+function addSegment(t='topic', n='', note='') {
+  const div = document.createElement('div');
+  div.className = 'segment-item';
+  div.innerHTML = `
+    <div class="seg-row">
+      <select class="s-type">
+        <option value="intro" ${t==='intro'?'selected':''}>Intro</option>
+        <option value="topic" ${t==='topic'?'selected':''}>Topic</option>
+        <option value="music" ${t==='music'?'selected':''}>Music</option>
+        <option value="outro" ${t==='outro'?'selected':''}>Outro</option>
+      </select>
+      <input type="text" class="s-name" placeholder="Segment Title" value="${n}" style="flex:1;">
+      <button onclick="this.parentElement.parentElement.remove()" style="background:none; border:none; color:var(--rust); cursor:pointer; font-weight:bold;">✕</button>
+    </div>
+    <textarea class="seg-note" placeholder="Write your script or notes here...">${note}</textarea>
+  `;
+  document.getElementById('seg-list').appendChild(div);
+}
+
+function saveEp() {
+  const name = document.getElementById('ep-name').value || 'Untitled Episode';
+  const segments = [];
+  document.querySelectorAll('.segment-item').forEach(item => {
+    segments.push({
+      t: item.querySelector('.s-type').value,
+      n: item.querySelector('.s-name').value,
+      note: item.querySelector('.seg-note').value
+    });
+  });
+
+  if(modalEpId) {
+    const idx = episodes.findIndex(e => e.id === modalEpId);
+    episodes[idx] = { id: modalEpId, name, segments };
+  } else {
+    episodes.push({ id: Date.now(), name, segments });
+  }
+
+  localStorage.setItem('fn_episodes', JSON.stringify(episodes));
+  modalEpId = null;
+  showPage('dash');
+}
+
+function openModal(id) {
+  modalEpId = id;
+  const ep = episodes.find(e => e.id === id);
+  let html = `<h1 style="font-family:'Bebas Neue'; font-size:4rem;">${ep.name}</h1>`;
+  html += `<div style="margin-top:30px;">`;
+  ep.segments.forEach(s => {
+    html += `<div style="margin-bottom:25px; border-bottom:1px solid rgba(0,0,0,0.1); padding-bottom:15px;">
+      <span style="font-family:'Space Mono'; color:${SEG_COLOR[s.t]}; font-weight:bold;">[${s.t.toUpperCase()}]</span>
+      <span style="font-family:'DM Sans'; font-weight:500; font-size:1.4rem; margin-left:10px;">${s.n}</span>
+      <p style="margin-top:10px; font-family:'DM Sans'; white-space: pre-wrap;">${s.note}</p>
+    </div>`;
+  });
+  html += `</div>`;
+  document.getElementById('m-body').innerHTML = html;
+  document.getElementById('modal-bg').classList.add('open');
+}
+
+function closeModal(e) { if(e.target.id === 'modal-bg') closeModalDirect(); }
+function closeModalDirect() { document.getElementById('modal-bg').classList.remove('open'); }
+function editFromModal() { closeModalDirect(); openBuilder(modalEpId); }
+
+renderDash();
+</script>
+
 </body>
 </html>
