@@ -31,8 +31,19 @@ body {
   font-family: 'DM Sans', sans-serif;
   color: var(--ink);
   overflow-x: hidden;
+  border: 2px solid;
+  border-image: repeating-linear-gradient(
+    90deg,
+    #2A6B3A 0px,
+    #2A6B3A 4px,
+    #D4960A 4px,
+    #D4960A 8px,
+    #C0392B 8px,
+    #C0392B 12px,
+    #F5EDDA 12px,
+    #F5EDDA 16px
+  ) 1;
 }
-
 
 /* ── LOADING OVERLAY ── */
 #loading-overlay {
