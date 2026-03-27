@@ -1007,26 +1007,29 @@ function editEp(id) {
   document.getElementById('f-notes').value     = ep.notes      || '';
   const chip = document.querySelector(`.type-chip[data-t="${ep.type}"]`);
   if (chip) pickType(ep.type, chip);
-  if (ep.segments) ep.segments.forEach((s, i) => { segNotes[i] = s.note; });
-  openBuilder();
-}
-
-function delEp(id) {
-  if (!confirm('Delete this episode?')) return;
-  eps = eps.filter(e => e.id !== id); save(); renderCal();
-}
-
-// ── EPISODE VIEW MODAL ──
-function openModal(id) {
+function editEp(id) {
   const ep = eps.find(e => e.id === id); if (!ep) return;
-  modalEpId = id;
-  document.getElementById('m-title').textContent = ep.title;
-  const d = new Date(ep.date);
-  let html = `<div class="info-row">
-    <span class="wk-type-sticker ${TYPE_STK[ep.type]}">Type ${ep.type} &middot; ${TYPE_LABEL[ep.type]}</span>
-    <span class="info-tag">${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}</span>
-    <span class="info-tag">4:20 &ndash; 5:45pm</span>
-  </div>`;
+  editId = id;
+  document.getElementById('f-title').value = ep.title;
+  document.getElementById('f-date').value = ep.date;
+  document.getElementById('f-guest').value = ep.guest || '';
+  document.getElementById('f-defendant').value = ep.defendant || '';
+  document.getElementById('f-judge').value = ep.judge || '';
+  document.getElementById('f-spotlight').value = ep.spotlight || '';
+  document.getElementById('f-notes').value = ep.notes || '';
+  pickType(ep.type, document.querySelector(`.type-chip[data-t="${ep.type}"]`));
+  if (ep.segments) {
+    ep.segments.forEach((s, i) => { segNotes[i] = s.note || ''; });
+    RUNDOWNS[ep.type].forEach((s, i) => {
+      const prev = document.getElementById('rdprev-' + i);
+      if (prev) {
+        const first = (segNotes[i] || '').split('\n')[0].substring(0, 70);
+        prev.textContent = first ? first + (segNotes[i].length > 70 ? '...' : '') : 'Click "Edit Segments" to add notes...';
+      }
+    });
+  }
+  gotoView('builder', document.querySelectorAll('.nav-tab')[1]);
+}
   if (ep.guest)      html += `<div class="info-block"><strong>Pro-25Flow guest:</strong> ${ep.guest}</div>`;
   if (ep.defendant)  html += `<div class="info-block"><strong>Artist on trial:</strong> ${ep.defendant}</div>`;
   if (ep.judge)      html += `<div class="info-block"><strong>Guest judge:</strong> ${ep.judge}</div>`;
