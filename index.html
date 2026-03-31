@@ -728,8 +728,11 @@ let eps = [], editId = null, selType = null, segNotes = {}, modalEpId = null;
 // ── FIREBASE LOAD / SAVE ──
 async function loadData() {
   setStatus('saving','Connecting...');
+  const timeout = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error('Firebase timeout')), 5000)
+  );
   try {
-    const snap = await getDoc(DOC_REF);
+    const snap = await Promise.race([getDoc(DOC_REF), timeout]);
     if (snap.exists()) {
       eps = snap.data().episodes || [];
       setStatus('ok','Firebase ✓');
@@ -998,18 +1001,6 @@ function clearForm() {
 function editEp(id) {
   const ep = eps.find(e => e.id === id); if (!ep) return;
   editId = id;
-  document.getElementById('f-title').value     = ep.title;
-  document.getElementById('f-date').value      = ep.date;
-  document.getElementById('f-guest').value     = ep.guest      || '';
-  document.getElementById('f-defendant').value = ep.defendant  || '';
-  document.getElementById('f-judge').value     = ep.judge      || '';
-  document.getElementById('f-spotlight').value = ep.spotlight  || '';
-  document.getElementById('f-notes').value     = ep.notes      || '';
-  const chip = document.querySelector(`.type-chip[data-t="${ep.type}"]`);
-  if (chip) pickType(ep.type, chip);
-function editEp(id) {
-  const ep = eps.find(e => e.id === id); if (!ep) return;
-  editId = id;
   document.getElementById('f-title').value = ep.title;
   document.getElementById('f-date').value = ep.date;
   document.getElementById('f-guest').value = ep.guest || '';
@@ -1030,6 +1021,14 @@ function editEp(id) {
   }
   gotoView('builder', document.querySelectorAll('.nav-tab')[1]);
 }
+
+function openModal(id) {
+  const ep = eps.find(e => e.id === id); if (!ep) return;
+  modalEpId = id;
+  document.getElementById('m-title').textContent = ep.title;
+  const d = new Date(ep.date);
+  let html = `<div class="info-block"><strong>Date:</strong> ${d.getDate()} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]} ${d.getFullYear()}</div>`;
+  html += `<div class="info-block"><strong>Type:</strong> ${ep.type} — ${{ A:'Interview', B:'FN Court', C:'Conversational', D:'The Capsule', E:'Artist Spotlight' }[ep.type]}</div>`;
   if (ep.guest)      html += `<div class="info-block"><strong>Pro-25Flow guest:</strong> ${ep.guest}</div>`;
   if (ep.defendant)  html += `<div class="info-block"><strong>Artist on trial:</strong> ${ep.defendant}</div>`;
   if (ep.judge)      html += `<div class="info-block"><strong>Guest judge:</strong> ${ep.judge}</div>`;
@@ -1051,6 +1050,13 @@ function editEp(id) {
   }
   document.getElementById('m-body').innerHTML = html;
   document.getElementById('modal-bg').classList.add('open');
+}
+
+function delEp(id) {
+  if (!confirm('Delete this episode?')) return;
+  eps = eps.filter(e => e.id !== id);
+  save();
+  renderCal();
 }
 
 function closeModal(e)     { if (e.target === document.getElementById('modal-bg')) closeModalDirect(); }
