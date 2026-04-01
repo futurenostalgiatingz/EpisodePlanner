@@ -568,7 +568,7 @@ function FNPlanner({ user }) {
   const saveLabel = saveStatus==='saving'?'SAVING...':saveStatus==='saved'?'✓ SAVED':saveStatus==='error'?'⚠ ERROR':'';
 
   if (loading) return (
-    <div style={{background:var(--bg)||'#1C1208',color:'rgba(212,150,10,0.4)',height:'100vh',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Space Mono,monospace',fontSize:'11px',letterSpacing:'3px'}}>
+    <div style={{background:'#1C1208',color:'rgba(212,150,10,0.4)',height:'100vh',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Space Mono,monospace',fontSize:'11px',letterSpacing:'3px'}}>
       LOADING...
     </div>
   );
