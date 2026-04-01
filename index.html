@@ -334,7 +334,7 @@ textarea.field-input{resize:vertical;min-height:60px;line-height:1.5;}
 .seg-row{display:flex;align-items:stretch;border:1px solid var(--border);margin-bottom:5px;background:var(--surf);transition:border-color 0.15s,background 0.15s;}
 .seg-row:hover{border-color:rgba(212,150,10,0.25);background:var(--surf2);}
 .seg-bar{width:4px;flex-shrink:0;}
-.seg-body{flex:1;display:grid;grid-template-columns:200px 64px 1fr 1fr;gap:10px;align-items:center;padding:10px 14px;}
+.seg-body{flex:1;display:grid;grid-template-columns:200px 64px 1fr;grid-template-rows:auto auto;gap:7px 10px;align-items:start;padding:10px 14px;}
 .seg-name-wrap{display:flex;align-items:center;gap:9px;}
 .seg-emoji{font-size:18px;flex-shrink:0;}
 .seg-name-text{font-size:12px;font-weight:600;color:var(--cream);line-height:1.3;}
@@ -344,6 +344,9 @@ textarea.field-input{resize:vertical;min-height:60px;line-height:1.5;}
 .seg-input{background:var(--surf2);border:1px solid var(--border);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:12px;padding:5px 9px;outline:none;width:100%;transition:border-color 0.2s;}
 .seg-input:focus{border-color:rgba(212,150,10,0.4);}
 .seg-input::placeholder{color:rgba(245,237,218,0.15);}
+.seg-notes{grid-column:1/-1;background:var(--surf2);border:1px solid var(--border);border-left:3px solid;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.65;padding:7px 10px;outline:none;width:100%;resize:vertical;min-height:54px;transition:border-color 0.2s;}
+.seg-notes:focus{border-color:rgba(212,150,10,0.4);}
+.seg-notes::placeholder{color:rgba(245,237,218,0.12);font-style:italic;}
 
 /* ── Show Bible panel ── */
 .bible-panel{position:fixed;inset:0;z-index:300;display:flex;}
@@ -419,7 +422,7 @@ textarea.field-input{resize:vertical;min-height:60px;line-height:1.5;}
 
 @media(max-width:800px){
   .seg-body{grid-template-columns:1fr 56px;}
-  .seg-input:last-child{display:none;}
+  .seg-input:last-child{display:none;}.seg-notes{min-height:40px;}
   .sidebar{width:210px;min-width:210px;}
   .editor{padding:14px;}
 }
@@ -732,7 +735,9 @@ function FNPlanner({ user }) {
                           onChange={e=>updateSeg(currentEp.id,seg.id,{dur:Number(e.target.value)})}/>
                         <input className="seg-input" value={seg.guest||''} placeholder="Guest / Source"
                           onChange={e=>updateSeg(currentEp.id,seg.id,{guest:e.target.value})}/>
-                        <input className="seg-input" value={seg.notes||''} placeholder={seg.hint}
+                        <textarea className="seg-notes"
+                          style={{borderLeftColor:col}}
+                          value={seg.notes||''} placeholder={seg.hint}
                           onChange={e=>updateSeg(currentEp.id,seg.id,{notes:e.target.value})}/>
                       </div>
                     </div>
